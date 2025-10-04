@@ -1,0 +1,94 @@
+# ========== Unity 项目通用忽略规则 ==========
+
+# Unity 生成的临时文件夹
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# 内置缓存
+MemoryCaptures/
+sysinfo.txt
+
+# 自动导入缓存
+Assets/AssetStoreTools*
+Assets/StreamingAssets/aa/*
+Assets/AddressableAssetsData/*/BuildLayout.txt
+Assets/AddressableAssetsData/*/bin/
+
+# Unity 版本控制（Collaborate）缓存
+.collabignore
+.collab/
+.collab*
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+
+# Rider & Visual Studio 缓存
+*.DotSettings.user
+.vs/
+.idea/
+*.code-workspace
+
+# Build 输出
+*.apk
+*.aab
+*.xcodeproj
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+*.ipa
+*.exe
+*.app
+*.app.dSYM/
+*.dll
+*.dylib
+*.so
+*.bundle
+
+# 旧版本的 Unity Cloud Build 缓存
+sysinfo.txt
+
+# 包管理器
+Packages/com.unity.package-manager-ui/
+Packages/com.unity.collab-proxy/
+
+# 自动生成的 Addressables / AssetBundles
+AssetBundles/
+Assets/StreamingAssets/aa/
+Assets/StreamingAssets/AssetBundles/
+
+# Crash Reports
+*.stacktrace
+
+# ========== 操作系统缓存 ==========
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+.Trashes
+ehthumbs.db

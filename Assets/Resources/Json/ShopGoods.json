@@ -1,0 +1,107 @@
+{
+	"vipcard": [
+			{
+				"id": 1,
+				"title": "银卡",
+				"icon": "shop_trade_vip_1",
+				"price": 380,
+				"clubnum": 1,
+				"emojinum": 300,
+				"delaynum": 20
+			},
+			{
+				"id": 2,
+				"title": "金卡",
+				"icon": "shop_trade_vip_2",
+				"price": 880,
+				"clubnum": 2,
+				"emojinum": 500,
+				"delaynum": 50
+			},
+			{
+				"id": 3,
+				"title": "黑卡",
+				"icon": "shop_trade_vip_3",
+				"price": 1580,
+				"clubnum": 3,
+				"emojinum": 1000,
+				"delaynum": 100
+			}
+	],
+	"gold": [
+		{
+			"id": 11,
+			"title": "金币300",
+			"icon": "gold300",
+			"price": 60,
+			"gold": 300,
+			"gift": 0
+		},
+		{
+			"id": 12,
+			"title": "金币1500",
+			"icon": "gold1500",
+			"price": 300,
+			"gold": 1500,
+			"gift": 0
+		},
+		{
+			"id": 13,
+			"title": "金币14900",
+			"icon": "gold14900",
+			"price": 2980,
+			"gold": 14900,
+			"gift": 0
+		}
+	],
+	"diamond": [
+		{
+			"id": 21,
+			"title": "钻石60",
+			"icon": "diamond60",
+			"price": 6,
+			"diamond": 60,
+			"gift": 0
+		},
+		{
+			"id": 22,
+			"title": "钻石300",
+			"icon": "diamond300",
+			"price": 30,
+			"diamond": 300,
+			"gift": 0
+		},
+		{
+			"id": 23,
+			"title": "钻石880",
+			"icon": "diamond880",
+			"price": 88,
+			"diamond": 880,
+			"gift": 0
+		},
+		{
+			"id": 24,
+			"title": "钻石1280",
+			"icon": "diamond1280",
+			"price": 128,
+			"diamond": 1280,
+			"gift": 38
+		},
+		{
+			"id": 25,
+			"title": "钻石2980",
+			"icon": "diamond2980",
+			"price": 298,
+			"diamond": 2980,
+			"gift": 108
+		},
+		{
+			"id": 26,
+			"title": "钻石6480",
+			"icon": "diamond6480",
+			"price": 648,
+			"diamond": 6480,
+			"gift": 288
+		}
+	]
+}
