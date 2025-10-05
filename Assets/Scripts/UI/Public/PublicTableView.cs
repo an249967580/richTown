@@ -175,7 +175,34 @@ namespace RT
             ItemTableData data = _md[row];
             showMask(true);
             _enterRoom = StartCoroutine(hideMask());
-            _md.EnterRoom(data.roomId, (result) =>
+            if (data.isPin)
+            {
+                onPin(data.roomId);
+            }
+            // _md.EnterRoom(data.roomId, (result) =>
+            // {
+            //     _queueAction.Enqueue(() =>
+            //     {
+            //         canEnter(result);
+            //     });
+            // });
+        }
+
+        void onPin(long roomId)
+        {
+            KeyBoardView vi = UIClubSpawn.Instance.CreateKeyBoardView();
+            vi.OnKeyBoardEvent = (pin) =>
+            {
+                vi.HideAndDestory();
+                onEnterTable(roomId, pin);
+            };
+        }
+
+        void onEnterTable(long roomId, string ping)
+        {
+            UIClubSpawn.Instance.CreateLoadMask();
+            _enterRoom = StartCoroutine(hideMask());
+            _md.EnterRoom(roomId, ping,(result) =>
             {
                 _queueAction.Enqueue(() =>
                 {
@@ -207,8 +234,8 @@ namespace RT
             CreateTexasView view = UIClubSpawn.Instance.CreateTexasView();
             view.OnCreateTabbleEvent = () =>
             {
-                // view.HideAndDestory();
-                // findList();
+                view.HideAndDestory();
+                findList(false);
             };
             // JsonObject param = new JsonObject();
             // showMask(true);

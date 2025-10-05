@@ -545,22 +545,22 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         }
         if (RoomInfo != null && RoomInfo.IsPublic == 0)
         {
-            if (RoomInfo.RoomTime > 0)
-            {
-                RoomInfo.RoomTime -= Time.deltaTime;
-                if (RoomInfo.RoomTime < 300 && RoomInfo.RoomTime % 60 == 0)
-                {
-                    GetRestTime();
-                }
-            }
-            else
-            {
-                if (!isPlaying)
-                {
-                    RoomInfo.RoomTime = 0;
-                    RoomClosedNotify();
-                }
-            }
+            // if (RoomInfo.RoomTime > 0)
+            // {
+            //     RoomInfo.RoomTime -= Time.deltaTime;
+            //     if (RoomInfo.RoomTime < 300 && RoomInfo.RoomTime % 60 == 0)
+            //     {
+            //         GetRestTime();
+            //     }
+            // }
+            // else
+            // {
+            //     if (!isPlaying)
+            //     {
+            //         RoomInfo.RoomTime = 0;
+            //         RoomClosedNotify();
+            //     }
+            // }
         }
         if (Game.Instance.PomeloNode.GameDataQueue != null && Game.Instance.PomeloNode.GameDataQueue.Count > 0)
         {

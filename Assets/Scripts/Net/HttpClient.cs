@@ -178,6 +178,7 @@ public class HttpClient : MonoBehaviour
             Debug.Log("http error:" + req.responseCode);
             Debug.Log("http error:" + req.error);
         }
+        Debug.Log("http downloadHandler:" + req.downloadHandler.text);
         if (callback != null)
         {
             HttpResponse rsp;

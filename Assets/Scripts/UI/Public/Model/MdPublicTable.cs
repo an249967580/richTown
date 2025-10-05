@@ -15,12 +15,28 @@ namespace RT
         }
 
 
-        public void EnterRoom(long roomId, Action<JsonObject> action)
+        // public void EnterRoom(long roomId, Action<JsonObject> action)
+        // {
+        //     JsonObject param = new JsonObject();
+        //     param.Add("roomId", roomId);
+        //     param.Add("uid", Game.Instance.CurPlayer.Uid);
+        //     param.Add("pw", string.Empty);
+        //     if (GameType.IsDz(game))
+        //     {
+        //         TexasApi.EnterRoom(param, action);
+        //     }
+        //     else
+        //     {
+        //         BullApi.EnterRoom(param, action);
+        //     }
+        // }
+
+        public void EnterRoom(long roomId, string pw, Action<JsonObject> action)
         {
             JsonObject param = new JsonObject();
             param.Add("roomId", roomId);
             param.Add("uid", Game.Instance.CurPlayer.Uid);
-            param.Add("pw", string.Empty);
+            param.Add("pw", pw);
             if (GameType.IsDz(game))
             {
                 TexasApi.EnterRoom(param, action);
