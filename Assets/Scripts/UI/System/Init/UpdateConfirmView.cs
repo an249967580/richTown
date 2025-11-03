@@ -27,7 +27,7 @@ namespace RT
             set
             {
                 _version = value;
-                string msg = _version.versionName + "\n\n" + _version.updateLog;
+                string msg = "发现新版本，建议立即更新";
                 tvMsg.text = msg;
             }
         }

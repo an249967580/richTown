@@ -150,7 +150,7 @@ namespace RT
                 }
             });
         }
-#endregion
+        #endregion
 
 
         #region 用户资料模块
@@ -159,7 +159,8 @@ namespace RT
         /// </summary>
         /// <param name="param"></param>
         /// <param name="callback"></param>
-        public static void EditUserInfo(Dictionary<string, string> param, Action<string> callback = null) {
+        public static void EditUserInfo(Dictionary<string, string> param, Action<string> callback = null)
+        {
             Game.Instance.HttpReq.POST("code.php?_c=user&_a=edit", param, (resp, error) =>
             {
                 if (resp == null)
@@ -188,6 +189,56 @@ namespace RT
             });
         }
         #endregion
+        
+        public static void GetUserInfo_Data(Dictionary<string, string> param, Action<UserInfo, string> callback = null)
+        {
+           
+            Game.Instance.HttpReq.POST("code.php?_c=user&_a=info", param, (resp, error) =>
+            {
+                // if (error == null && resp.Code == 200)
+                // {
+                //     UserInfo player = JsonConvert.DeserializeObject<UserInfo>(resp.Data.ToString());
+                //     // player.Pid = 1;
+                //     if (callback != null)
+                //     {
+                //         callback(player, "");
+                //     }
+                // }
+                // else
+                // {
+                //     if (callback != null)
+                //     {
+                //         string msg = LocalizationManager.Instance.GetText(resp.Code.ToString());
+                //         msg = string.IsNullOrEmpty(msg) ? LocalizationManager.Instance.GetText("1012") : msg;
+                //         callback(null, msg);
+                //     }
+                // }
+                if (resp == null)
+                {
+                    error = LocalizationManager.Instance.GetText("1012");
+                }
+                else
+                {
+                    if (error == null && (resp.Code == 200 || resp.Code == 211))
+                    {
+                        UserInfo p = JsonConvert.DeserializeObject<UserInfo>(resp.Data.ToString());
+                        if (callback != null)
+                        {
+                            callback(p,null);
+                        }
+                    }
+                    else
+                    {
+                        if (callback != null)
+                        {
+                            string msg = LocalizationManager.Instance.GetText(resp.Code.ToString());
+                            msg = string.IsNullOrEmpty(msg) ? LocalizationManager.Instance.GetText("1012") : msg;
+                            callback(null,msg);
+                        }
+                    }
+                }
+            });
+        }
 
         #region 用户信息和表情使用
         public static void GetUserInfo(Dictionary<string, string> param, Action<GamePlayer, string> callback = null)

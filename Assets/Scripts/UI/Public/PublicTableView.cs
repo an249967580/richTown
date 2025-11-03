@@ -12,7 +12,7 @@ namespace RT
 {
     public class PublicTableView : MonoBehaviour, ITableViewDataSource, ITableViewDelegate
     {
-        public Text tvDiamond, tvCoins, tvTitleBlinds, tvTitle, tvClub, tvRoomName, tvMyCoins;
+        public Text tvDiamond, tvTitleBlinds, tvTitle, tvClub, tvRoomName, tvMyCoins;
         public Button btnBack, btnDiamondBuy, btnCoinBuy, btnStart, btnSwitch;
         public TableView tableView;
         public ClubSwitchView switchView;
@@ -22,6 +22,8 @@ namespace RT
         private string clubName;
 
         private List<ItemClubData> clubs;
+
+        public Text tvCoins;
 
         public GameObject itemPublicTablePrefab;
 
@@ -104,6 +106,44 @@ namespace RT
 
             tvClub.gameObject.SetActive(false);
             switchView.OnClubEnterEvent = enterClub;
+            NotificationCenter.Instance.AddNotifyListener(NotificationType.Currency, onCurrencyNotify);
+            NotificationCenter.Instance.AddNotifyListener(NotificationType.public_room_dissolve, onUpdatePublicRoom);
+            GetPlayerInfo();
+        }
+
+        void GetPlayerInfo()
+        {
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("clubId", "-1");
+            param.Add("uid", Game.Instance.CurPlayer.Uid.ToString());
+            UserApi.GetUserInfo_Data(param, (p, error) =>
+            {
+                if (error == null)
+                {
+                    // player = p;
+                    Game.Instance.CurPlayer.Gold = p.Gold;
+                    tvCoins.text = p.Gold.ToString();
+                }
+            });
+        }
+
+        private void OnDestroy()
+        {
+            NotificationCenter.Instance.RemoveNotifyListener(NotificationType.Currency, onCurrencyNotify);
+        }
+
+        void onCurrencyNotify(NotifyMsg msg)
+        {
+            if (Game.Instance.CurPlayer != null)
+            {
+                // DiamondTxt.text = Game.Instance.CurPlayer.Diamond.ToString();
+                tvCoins.text = Game.Instance.CurPlayer.Gold.ToString();
+            }
+        }
+
+        void onUpdatePublicRoom(NotifyMsg msg)
+        {
+            findList(true);
         }
 
         private void Start()
@@ -179,6 +219,10 @@ namespace RT
             {
                 onPin(data.roomId);
             }
+            else
+            {
+                onEnterTable(data.roomId, "");
+            }
             // _md.EnterRoom(data.roomId, (result) =>
             // {
             //     _queueAction.Enqueue(() =>
@@ -202,7 +246,7 @@ namespace RT
         {
             UIClubSpawn.Instance.CreateLoadMask();
             _enterRoom = StartCoroutine(hideMask());
-            _md.EnterRoom(roomId, ping,(result) =>
+            _md.EnterRoom(roomId, ping, (result) =>
             {
                 _queueAction.Enqueue(() =>
                 {
@@ -231,12 +275,20 @@ namespace RT
         // 快速加入
         void FastEnter()
         {
-            CreateTexasView view = UIClubSpawn.Instance.CreateTexasView();
-            view.OnCreateTabbleEvent = () =>
+            if (GameType.IsDz(_md.game))
             {
-                view.HideAndDestory();
-                findList(false);
-            };
+                CreateTexasView view = UIClubSpawn.Instance.CreateTexasView();
+                view.OnCreateTabbleEvent = () =>
+                {
+                    view.HideAndDestory();
+                    findList(true);
+                };
+            }
+            else
+            {
+                CreateBullView view = UIClubSpawn.Instance.CreateBullView();
+            }
+
             // JsonObject param = new JsonObject();
             // showMask(true);
             // _enterRoom = StartCoroutine(hideMask());
@@ -264,6 +316,8 @@ namespace RT
         void canEnter(JsonObject json)
         {
             showMask(false);
+            UIClubSpawn.Instance.HideMask();
+            // UIClubSpawn.Instance.hideMask();
             if (_enterRoom != null)
             {
                 StopCoroutine(_enterRoom);
@@ -312,6 +366,7 @@ namespace RT
         {
             yield return new WaitForSeconds(10);
             showMask(false);
+            // UIClubSpawn.Instance.HideMask();
         }
 
         #endregion

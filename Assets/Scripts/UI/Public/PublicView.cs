@@ -18,7 +18,7 @@ public class PublicView : MonoBehaviour {
         });
 
         TexasBtn.gameObject.SetActive(Game.Instance.CurPlayer.DzGameEnable == 1);
-        BullBtn.gameObject.SetActive(Game.Instance.CurPlayer.CowGameEnable == 1);
+        BullBtn.gameObject.SetActive(false);
     }
 	void Update () {
 		

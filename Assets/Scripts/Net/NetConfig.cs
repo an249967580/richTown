@@ -8,11 +8,11 @@ namespace RT
     public class NetConfig
     {
         // php 服务地址
-        // public static string serverAdr = "https://dzapi.7919.cn/poker/";
-        public static string serverAdr = "http://129.204.21.168:20001/poker/";
+        public static string serverAdr = "https://dzapi.7919.cn/poker/";
+        // public static string serverAdr = "http://129.204.21.168:20001/poker/";
 
         // pomelo 服务器
-        public static string pomeloHost = "129.204.21.168";
+        public static string pomeloHost = "54.46.75.92";
         // public static string pomeloHost = "129.204.21.168";
 
         public static int pomeloPort = 10001;

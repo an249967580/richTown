@@ -2077,7 +2077,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         int[] tmp = cards.ToList().GetRange(0, cardNum).ToArray();
         if (publicPokers.Count < 5 && cardNum < 5)
         {
-            ShowPublicBtn.gameObject.SetActive(true);
+            ShowPublicBtn.gameObject.SetActive(false);
         }
 
         ShowCenterCardsNotify(tmp);

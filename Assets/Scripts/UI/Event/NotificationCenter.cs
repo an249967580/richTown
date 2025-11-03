@@ -14,7 +14,7 @@ namespace RT
         {
             get
             {
-                if(_instance == null)
+                if (_instance == null)
                 {
                     _instance = new NotificationCenter();
                 }
@@ -31,7 +31,7 @@ namespace RT
 
         public void AddNotifyListener(NotificationType type, OnNotify onNotify)
         {
-            if(!_dictEvent.ContainsKey(type))
+            if (!_dictEvent.ContainsKey(type))
             {
                 List<OnNotify> list = new List<OnNotify>();
                 list.Add(onNotify);
@@ -45,7 +45,7 @@ namespace RT
 
         public void RemoveNotifyListener(NotificationType type)
         {
-            if(!_dictEvent.ContainsKey(type))
+            if (!_dictEvent.ContainsKey(type))
             {
                 return;
             }
@@ -70,9 +70,10 @@ namespace RT
                 return;
             }
             List<OnNotify> list = _dictEvent[type];
-            if(list != null && list.Count > 0)
+            if (list != null && list.Count > 0)
             {
-                foreach(OnNotify onNotify in list) {
+                foreach (OnNotify onNotify in list)
+                {
                     onNotify(msg);
                 }
             }
@@ -128,6 +129,7 @@ namespace RT
         Lock,              // 账号锁定
         Currency,          // 赠送钻石
         Paypal,            // paypal支付
-        StopServer         // 停服
+        StopServer,         // 停服
+        public_room_dissolve //刷新桌子
     }
 }

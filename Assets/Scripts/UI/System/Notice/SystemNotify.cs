@@ -90,6 +90,10 @@ namespace RT
             {
                 currencyNotify(jObject["data"] as JsonObject);
             }
+            else if(jObject["op"].ToString() == "public_room_dissolve")
+            {
+                NotificationCenter.Instance.DispatchNotify(NotificationType.public_room_dissolve, new NotifyMsg());
+            }
             else if (jObject["op"].ToString() == "stop_server")  // 停服
             {
                 string sceen = SceneManager.GetActiveScene().name;

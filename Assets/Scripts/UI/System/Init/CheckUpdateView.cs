@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.Networking;
+using System;
 
 namespace RT
 {
@@ -98,44 +101,119 @@ namespace RT
         void checkVersion()
         {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
+            // getVersion( Game.Instance.AndroidBuildVersionCode);
             _getVersion = true;
 #elif UNITY_ANDROID
-            _getVersion = true;
-            // getVersion( Game.Instance.AndroidBuildVersionCode);
+            // _getVersion = true;
+            getVersion( Game.Instance.AndroidBuildVersionCode);
 #elif UNITY_IOS
-            getVersion(Game.Instance.IOsBuildVersionCode);
+            _getVersion = true;
 #endif
         }
 
+        // IEnumerator RequestVersion(string url, int versionCode)
+        // {
+        //     using (UnityWebRequest req = UnityWebRequest.Get(url))
+        //     {
+        //         req.timeout = 10;
+        //         yield return req.SendWebRequest();
+
+        //         if (req.result != UnityWebRequest.Result.Success)
+        //         {
+        //             _getVersion = true;
+        //             Game.Instance.ShowTips("获取版本信息失败: " + req.error);
+        //             yield break;
+        //         }
+
+        //         try
+        //         {
+        //             string json = req.downloadHandler.text;
+        //             var data = JsonUtility.FromJson<VersionData>(json);
+
+        //             if (data != null && data.versionCode > Game.Instance.AndroidBuildVersionCode)
+        //             {
+        //                 confirmView.lastVersion = data;
+        //                 confirmView.Show();
+        //             }
+        //             else
+        //             {
+        //                 _getVersion = true;
+        //             }
+        //         }
+        //         catch (System.Exception e)
+        //         {
+        //             _getVersion = true;
+        //             Game.Instance.ShowTips("解析版本信息失败: " + e.Message);
+        //         }
+        //     }
+        // }
+
         void getVersion(int versionCode)
         {
-            SystemApi.GetLastVersion(channel, versionCode, (rsp) =>
-             {
-                 if (rsp.IsOk)
-                 {
-                     if (rsp.data != null && rsp.data.versionCode > Game.Instance.AndroidBuildVersionCode)
-                     {
-                         confirmView.lastVersion = rsp.data;
-                         confirmView.Show();
-                     }
-                     else
-                     {
-                         _getVersion = true;
-                     }
-                 }
-                 else
-                 {
-                     if (rsp.code == 0)
-                     {
-                         sureView.Show();
-                     }
-                     else
-                     {
-                         _getVersion = true;
-                         Game.Instance.ShowTips(rsp.errorMsg);
-                     }
-                 }
-             });
+            string url = "https://lm6789.com/richtown_version.json";
+
+            UnityWebRequest req = UnityWebRequest.Get(url);
+            req.timeout = 10;
+
+            req.SendWebRequest().completed += (asyncOp) =>
+            {
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    _getVersion = true;
+                    Game.Instance.ShowTips("获取版本信息失败: " + req.error);
+                    return;
+                }
+
+                try
+                {
+                    string json = req.downloadHandler.text;
+
+                    // ✅ 直接用 RT.Version（不要再定义 VersionData）
+                    RT.Version data = JsonUtility.FromJson<RT.Version>(json);
+
+                    if (data != null && data.versionCode > Game.Instance.AndroidBuildVersionCode)
+                    {
+                        confirmView.lastVersion = data;
+                        confirmView.Show();
+                    }
+                    else
+                    {
+                        _getVersion = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    _getVersion = true;
+                    Game.Instance.ShowTips("解析版本信息失败: " + e.Message);
+                }
+            };
+            // SystemApi.GetLastVersion(channel, versionCode, (rsp) =>
+            //  {
+            //      if (rsp.IsOk)
+            //      {
+            //          if (rsp.data != null && rsp.data.versionCode > Game.Instance.AndroidBuildVersionCode)
+            //          {
+            //              confirmView.lastVersion = rsp.data;
+            //              confirmView.Show();
+            //          }
+            //          else
+            //          {
+            //              _getVersion = true;
+            //          }
+            //      }
+            //      else
+            //      {
+            //          if (rsp.code == 0)
+            //          {
+            //              sureView.Show();
+            //          }
+            //          else
+            //          {
+            //              _getVersion = true;
+            //              Game.Instance.ShowTips(rsp.errorMsg);
+            //          }
+            //      }
+            //  });
         }
 
         void onUpdateEvent(UpdateEventOp op)
@@ -149,12 +227,13 @@ namespace RT
 #elif UNITY_ANDROID
                     downLoad(confirmView.lastVersion.downloadUrl, confirmView.lastVersion.versionName);
 #elif UNITY_IOS
-			if(!string.IsNullOrEmpty(confirmView.lastVersion.downloadUrl)){
-				Application.OpenURL(confirmView.lastVersion.downloadUrl);
-			}
-			else{
-				Application.OpenURL("itms-apps://itunes.apple.com/us/app/richtown/id1266119729");
-			}
+_getVersion = true;
+			// if(!string.IsNullOrEmpty(confirmView.lastVersion.downloadUrl)){
+			// 	Application.OpenURL(confirmView.lastVersion.downloadUrl);
+			// }
+			// else{
+			// 	Application.OpenURL("itms-apps://itunes.apple.com/us/app/richtown/id1266119729");
+			// }
 #endif
                     break;
                 case UpdateEventOp.Cancel:
@@ -193,5 +272,37 @@ namespace RT
                 SceneManager.LoadScene("LoginScene");
             }
         }
+
+        public void OnInstallResult(string resultCode)
+        {
+            Debug.Log($"[InstallResult] resultCode={resultCode}");
+
+            // Android 安装界面关闭（不论用户取消或完成）都会触发这个
+            // resultCode 一般为 -1（RESULT_OK） 或 0（RESULT_CANCELED）
+
+            if (resultCode == "0")
+            {
+                // 用户取消安装
+                downLoadView.Hide();
+                confirmView.Show();
+                Game.Instance.ShowTips("安装已取消");
+                _getVersion = true;
+            }
+            else
+            {
+                // 安装成功（或至少用户完成操作）
+                downLoadView.Hide();
+                Game.Instance.ShowTips("安装完成");
+                _getVersion = true;
+            }
+        }
     }
+
+    // [System.Serializable]
+    // public class VersionData
+    // {
+    //     public int versionCode;
+    //     public string updateDesc;
+    //     public string downloadUrl;
+    // }
 }

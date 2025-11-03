@@ -33,8 +33,8 @@ namespace RT
             _md = new MdCreateTable(GameType.bull);
             btnClose.onClick.AddListener(HideAndDestory);
             btnCreate.onClick.AddListener(onCreate);
-            btnFee.onClick.AddListener(showFee);
-            btnTime.onClick.AddListener(showTime);
+            // btnFee.onClick.AddListener(showFee);
+            // btnTime.onClick.AddListener(showTime);
             sAntes.onValueChanged.AddListener(antesChange);
             sChips.onValueChanged.AddListener(chipsChange);
 
@@ -77,10 +77,10 @@ namespace RT
             _md.minChips = _md.BlindList[idxAntes] * _md.RateList[idxChips];
             tgBuyIn.isOn = false;
             _md.isBuyIn = false;
-            _md.fee = _md.FeeList[0].num;
-            tvFee.text = _md.FeeList[0].title;
-            _md.time = _md.TimeList[0].num;
-            tvTime.text = _md.TimeList[0].title;
+            // _md.fee = _md.FeeList[0].num;
+            // tvFee.text = _md.FeeList[0].title;
+            // _md.time = _md.TimeList[0].num;
+            // tvTime.text = _md.TimeList[0].title;
         }
 
         void onCreate()
@@ -149,48 +149,48 @@ namespace RT
 
         #region
 
-        void showFee()
-        {
-            goDrop.SetActive(true);
-            lstFee.gameObject.SetActive(true);
-            lstTime.gameObject.SetActive(false);
-            if (lstFee.ViewItems.Count <= 0)
-            {
-                for (int i = 0; i < _md.FeeList.Count; i++)
-                {
-                    ItemDropView vi = lstFee.Add(_md.FeeList[i]) as ItemDropView;
-                    vi.OnItemClickEvent = (view) =>
-                    {
-                        ItemDropData data = view.Data as ItemDropData;
-                        tvFee.text = data.title;
-                        _md.fee = data.num;
-                        goDrop.SetActive(false);
-                    };
-                }
-            }
+        // void showFee()
+        // {
+        //     goDrop.SetActive(true);
+        //     lstFee.gameObject.SetActive(true);
+        //     lstTime.gameObject.SetActive(false);
+        //     if (lstFee.ViewItems.Count <= 0)
+        //     {
+        //         for (int i = 0; i < _md.FeeList.Count; i++)
+        //         {
+        //             ItemDropView vi = lstFee.Add(_md.FeeList[i]) as ItemDropView;
+        //             vi.OnItemClickEvent = (view) =>
+        //             {
+        //                 ItemDropData data = view.Data as ItemDropData;
+        //                 tvFee.text = data.title;
+        //                 _md.fee = data.num;
+        //                 goDrop.SetActive(false);
+        //             };
+        //         }
+        //     }
 
-        }
+        // }
 
-        void showTime()
-        {
-            goDrop.SetActive(true);
-            lstFee.gameObject.SetActive(false);
-            lstTime.gameObject.SetActive(true);
-            if (lstTime.ViewItems.Count <= 0)
-            {
-                for (int i = 0; i < _md.TimeList.Count; i++)
-                {
-                    ItemDropView vi = lstTime.Add(_md.TimeList[i]) as ItemDropView;
-                    vi.OnItemClickEvent = (view) =>
-                    {
-                        ItemDropData data = view.Data as ItemDropData;
-                        tvTime.text = data.title;
-                        _md.time = data.num;
-                        goDrop.SetActive(false);
-                    };
-                }
-            }
-        }
+        // void showTime()
+        // {
+        //     goDrop.SetActive(true);
+        //     lstFee.gameObject.SetActive(false);
+        //     lstTime.gameObject.SetActive(true);
+        //     if (lstTime.ViewItems.Count <= 0)
+        //     {
+        //         for (int i = 0; i < _md.TimeList.Count; i++)
+        //         {
+        //             ItemDropView vi = lstTime.Add(_md.TimeList[i]) as ItemDropView;
+        //             vi.OnItemClickEvent = (view) =>
+        //             {
+        //                 ItemDropData data = view.Data as ItemDropData;
+        //                 tvTime.text = data.title;
+        //                 _md.time = data.num;
+        //                 goDrop.SetActive(false);
+        //             };
+        //         }
+        //     }
+        // }
 
         #endregion
 

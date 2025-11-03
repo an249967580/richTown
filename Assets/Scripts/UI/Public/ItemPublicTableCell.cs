@@ -9,6 +9,8 @@ namespace RT
         public Text tvRoomName, tvPlayers, tvBlinds, tvBuyIn;
         public ItemTableData data;
 
+        public Image suoIcon;
+
         public override string ReuseIdentifier
         {
             get
@@ -33,6 +35,14 @@ namespace RT
                 tvBlinds.text = data.blindBet.ToString();
             }
             tvBuyIn.text = data.minBet.ToString();
+            if (data.isPin)
+            {
+                suoIcon.gameObject.SetActive(true);
+            }
+            else
+            {
+                suoIcon.gameObject.SetActive(false);
+            }
         }
 
         public override void SetHighlighted()
