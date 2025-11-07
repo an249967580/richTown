@@ -30,7 +30,7 @@ namespace RT
             channel = 1;
             androidSplash();
 #elif UNITY_IOS
-            channel = 2;
+            _getVersion = true;
 #endif
             _loadCountries = false;
             _getVersion = false;
