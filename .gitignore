@@ -18,6 +18,7 @@ Assets/AssetStoreTools*
 Assets/StreamingAssets/aa/*
 Assets/AddressableAssetsData/*/BuildLayout.txt
 Assets/AddressableAssetsData/*/bin/
+Assets/FacebookSDK
 
 # Unity 版本控制（Collaborate）缓存
 .collabignore
