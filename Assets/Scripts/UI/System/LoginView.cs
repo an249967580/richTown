@@ -1,4 +1,4 @@
-﻿using Facebook.Unity;
+﻿// using Facebook.Unity;
 using Newtonsoft.Json;
 using RT;
 using SimpleJson;
@@ -34,7 +34,7 @@ public class LoginView : MonoBehaviour
 
     private void Awake()
     {
-        initFB();
+        // initFB();
     }
 
     void Start()
@@ -68,32 +68,32 @@ public class LoginView : MonoBehaviour
     }
 
     #region fb初始化
-    private void initFB()
-    {
-        if (!FB.IsInitialized)
-        {
-            FB.Init(InitCallback, OnHideUnity);
-        }
-        else
-        {
-            FB.ActivateApp();
-        }
-        FacebookBtn.onClick.AddListener(delegate
-        {
-            FacebookLoginClick();
-        });
-    }
+    // private void initFB()
+    // {
+    //     if (!FB.IsInitialized)
+    //     {
+    //         FB.Init(InitCallback, OnHideUnity);
+    //     }
+    //     else
+    //     {
+    //         FB.ActivateApp();
+    //     }
+    //     FacebookBtn.onClick.AddListener(delegate
+    //     {
+    //         FacebookLoginClick();
+    //     });
+    // }
 
     private void InitCallback()
     {
-        if (FB.IsInitialized)
-        {
-            FB.ActivateApp();
-        }
-        else
-        {
-            Debug.Log("初始化失败");
-        }
+        // if (FB.IsInitialized)
+        // {
+        //     FB.ActivateApp();
+        // }
+        // else
+        // {
+        //     Debug.Log("初始化失败");
+        // }
     }
 
     private void OnHideUnity(bool isGameShown)
@@ -165,35 +165,35 @@ public class LoginView : MonoBehaviour
     public void FacebookLoginClick()
     {
         var perms = new List<string>() { "public_profile"};
-        FB.LogInWithReadPermissions(perms, authCallBack);
+        // FB.LogInWithReadPermissions(perms, authCallBack);
     }
 
-    private void authCallBack(ILoginResult result)
-    {
-        if (FB.IsLoggedIn)
-        {
-            // AccessToken class will have session details
-            var aToken = Facebook.Unity.AccessToken.CurrentAccessToken;
-            // Print current access token's User ID
-            Debug.Log(aToken.UserId);
+    // private void authCallBack(ILoginResult result)
+    // {
+    //     if (FB.IsLoggedIn)
+    //     {
+    //         // AccessToken class will have session details
+    //         var aToken = Facebook.Unity.AccessToken.CurrentAccessToken;
+    //         // Print current access token's User ID
+    //         Debug.Log(aToken.UserId);
 
-            FB.API("me?id,name", HttpMethod.GET, (rsp) =>
-            {
-                Debug.Log(rsp.RawResult);
-                string name = "";
-                rsp.ResultDictionary.TryGetValue("name", out name);
-                if(name != null && name.Length > 20)
-                {
-                    name = name.Substring(0, 20);
-                }
-                thirdLogin("facebook", aToken.UserId, name);
-            });
-        }
-        else
-        {
-            Debug.Log("user cancelled login");
-        }
-    }
+    //         FB.API("me?id,name", HttpMethod.GET, (rsp) =>
+    //         {
+    //             Debug.Log(rsp.RawResult);
+    //             string name = "";
+    //             rsp.ResultDictionary.TryGetValue("name", out name);
+    //             if(name != null && name.Length > 20)
+    //             {
+    //                 name = name.Substring(0, 20);
+    //             }
+    //             thirdLogin("facebook", aToken.UserId, name);
+    //         });
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("user cancelled login");
+    //     }
+    // }
 
     // 第三方登陸
     void thirdLogin(string platform, string platformId, string platNick)
