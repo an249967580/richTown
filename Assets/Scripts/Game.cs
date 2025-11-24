@@ -113,7 +113,7 @@ public class Game : MonoBehaviour {
     public MainTabView MainTabView;
 
     // 这个地方，升级版本时要修改
-    public int AndroidBuildVersionCode = 5;
+    public int AndroidBuildVersionCode = 9;
     public int IOsBuildVersionCode = 5;
 
     private void Awake()

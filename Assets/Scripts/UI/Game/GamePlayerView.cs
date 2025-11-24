@@ -52,25 +52,29 @@ public class GamePlayerView : MonoBehaviour, IPointerClickHandler
         EmojiListView.Clear();
         gameObject.SetActive(false);
     }
-    void GetPlayerInfo() {
+    void GetPlayerInfo()
+    {
         Dictionary<string, string> param = new Dictionary<string, string>();
-        param.Add("clubId", ClubId.ToString());
+        param.Add("clubId", "-1");
         param.Add("uid", TargetUId.ToString());
-        UserApi.GetUserInfo(param, (p, error) => {
+        UserApi.GetUserInfo(param, (p, error) =>
+        {
             if (error == null)
             {
                 player = p;
                 gameObject.SetActive(true);
                 RenderView();
             }
-            else {
+            else
+            {
                 Game.Instance.ShowTips(error);
                 Close();
             }
 
         });
     }
-    void InitView() {
+    void InitView()
+    {
         if (TargetUId == Game.Instance.CurPlayer.Uid)
         {
             EmojiHintTxt.text = string.Format(LocalizationManager.Instance.GetText("7004"), 1);
@@ -97,7 +101,8 @@ public class GamePlayerView : MonoBehaviour, IPointerClickHandler
                 };
             }
         }
-        CloseBtn.onClick.AddListener(delegate() {
+        CloseBtn.onClick.AddListener(delegate ()
+        {
             Close();
         });
     }
@@ -122,7 +127,7 @@ public class GamePlayerView : MonoBehaviour, IPointerClickHandler
         EmojiItemData s6 = new EmojiItemData();
         s6.Emoji = "Xinsui";
         s6.ImgUrl = "Textures/Emoji/Self/xinsui_btn";
-        
+
         selfEmojis.Add(s1);
         selfEmojis.Add(s2);
         selfEmojis.Add(s3);
@@ -157,7 +162,8 @@ public class GamePlayerView : MonoBehaviour, IPointerClickHandler
         otherEmojis.Add(s15);
         otherEmojis.Add(s16);
     }
-    void RenderView() {
+    void RenderView()
+    {
         string avatar = player.Avatar;
         if (Validate.IsNotEmpty(avatar))
         {
@@ -169,17 +175,19 @@ public class GamePlayerView : MonoBehaviour, IPointerClickHandler
                 }));
             }
         }
-        else {
+        else
+        {
             PlayerAvatarImg.sprite = Resources.Load<Sprite>("Textures/Common/def_avatar_large");
         }
         PlayerNickTxt.text = player.Nickname;
         PlayerIDTxt.text = "ID:" + TargetUId;
-        VPIPTxt.text = player.EnterPool*100 + "%";
-        TotalHandsTxt.text = player.HandTotal+"";
+        VPIPTxt.text = player.EnterPool * 100 + "%";
+        TotalHandsTxt.text = player.HandTotal + "";
         TotalGamesTxt.text = player.RoomTotal + "";
     }
 
-    public void Show(int tagId,int clubId,bool limit = false) {
+    public void Show(int tagId, int clubId, bool limit = false)
+    {
         gameObject.SetActive(true);
         LimitPanel.gameObject.SetActive(limit);
         TargetUId = tagId;
@@ -200,5 +208,11 @@ public class GamePlayerView : MonoBehaviour, IPointerClickHandler
                 Game.Instance.ShowTips(error);
             }
         });
+        // NotifyMsg msg = new NotifyMsg()
+        // .value("from", TargetUId)
+        // .value("to", TargetUId)
+        // .value("emoji", emoji);
+
+        // NotificationCenter.Instance.DispatchNotify(NotificationType.local_user_emoji, msg);
     }
 }

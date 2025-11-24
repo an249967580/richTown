@@ -130,6 +130,7 @@ namespace RT
         Currency,          // 赠送钻石
         Paypal,            // paypal支付
         StopServer,         // 停服
-        public_room_dissolve //刷新桌子
+        public_room_dissolve, //刷新桌子
+        local_user_emoji //发送表情
     }
 }

@@ -10,7 +10,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum TexasGameOp {
+public enum TexasGameOp
+{
     EnterRoomOp = 0,
     OutRoomOp = 1,
     SitDownOp = 2,
@@ -48,7 +49,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     public Text MainChipPoolTxt;
     public Text CurPotTxt;
     public Button StartBtn;
-	public Text InfoTxt;
+    public Text InfoTxt;
 
     //房间操作界面
     public TexasBuyChipView BuyChipView;
@@ -69,7 +70,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     //游戏操作界面
     public TexasActionView ActionView;
     public GamePlayerView PlayerInfoView;
-    
+
     public Image ProcessImg;
     public Text ProcessTxt;
 
@@ -82,7 +83,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     //当前玩家信息
     TexasPlayer me;
     int ClubChips;//当前玩家在这个俱乐部的所有筹码
-    
+
     //自己玩家位置
     TexasSeatView CurPlayerSeat;
     //当前操作的玩家位置
@@ -136,7 +137,25 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         txtColors.Add(Color.white);
         colorPlayers = new Dictionary<Color, List<TexasPlayer>>();
         NotificationCenter.Instance.AddNotifyListener(NotificationType.StopServer, onStopServer);
+        NotificationCenter.Instance.AddNotifyListener(NotificationType.local_user_emoji, OnLocalEmoji);
     }
+
+    private void OnLocalEmoji(NotifyMsg msg)
+    {
+        int fromUid = (int)msg["from"];
+        int toUid = (int)msg["to"];
+        string emoji = (string)msg["emoji"];
+
+        EmojiUse eu = new EmojiUse
+        {
+            FromUId = fromUid,
+            ToUId = toUid,
+            Emoji = emoji
+        };
+
+        PlayerUseEmoji(eu);
+    }
+
     #region 停服通知
 
     void onStopServer(NotifyMsg msg)
@@ -148,18 +167,19 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     }
 
     private void OnDestroy()
-	{
-		Screen.autorotateToLandscapeLeft = false;
-		Screen.autorotateToLandscapeRight = false;
-		Screen.autorotateToPortrait = false;
-		Screen.autorotateToPortraitUpsideDown = false;
-		Screen.orientation = ScreenOrientation.Portrait;
+    {
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.Portrait;
         NotificationCenter.Instance.RemoveNotifyListener(NotificationType.StopServer, onStopServer);
     }
 
     #endregion
 
-    void RefreshNickColor() {
+    void RefreshNickColor()
+    {
         if (PlayerList != null)
         {
             colorPlayers.Clear();
@@ -191,8 +211,10 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                     double lat2 = string.IsNullOrEmpty(p2.Lat) ? 0 : double.Parse(p2.Lat);
                     double lng2 = string.IsNullOrEmpty(p2.Lng) ? 0 : double.Parse(p2.Lng);
 
-                    if (p1.UId != p2.UId && Location.Instance.Distance(lat1, lng1, lat2, lng2) < 50) {
-                        if (!tmpLast.Contains(p1)) {
+                    if (p1.UId != p2.UId && Location.Instance.Distance(lat1, lng1, lat2, lng2) < 50)
+                    {
+                        if (!tmpLast.Contains(p1))
+                        {
                             tmpLast.Add(p1);
                         }
                         tmpLast.Add(p2);
@@ -220,13 +242,15 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                colorPlayers.Add(Color.white,tmpWhite);
+                colorPlayers.Add(Color.white, tmpWhite);
             }
-            if (colorPlayers != null) {
+            if (colorPlayers != null)
+            {
                 foreach (Color cc in colorPlayers.Keys)
                 {
                     List<TexasPlayer> tmp1 = colorPlayers[cc];
-                    if (tmp1 != null) {
+                    if (tmp1 != null)
+                    {
                         foreach (TexasPlayer p in tmp1)
                         {
                             TexasSeatView s = SeatViews[p.Site];
@@ -252,55 +276,71 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         {
             GetRoomInfoDone(roomInfo);
         }
-        else {
+        else
+        {
             Game.Instance.ShowTips(LocalizationManager.Instance.GetText("1012"));// ("加载信息失败，请返回重试");
         }
 
-        StartBtn.onClick.AddListener(delegate {
+        StartBtn.onClick.AddListener(delegate
+        {
             OnStartBtnClick();
         });
-        ActionView.ActionFoldBtn.onClick.AddListener(delegate {
+        ActionView.ActionFoldBtn.onClick.AddListener(delegate
+        {
             OnFoldBtnClick();
         });
-        ActionView.ActionCheckBtn.onClick.AddListener(delegate {
+        ActionView.ActionCheckBtn.onClick.AddListener(delegate
+        {
             OnCheckBtnClick();
         });
-        ActionView.ActionCallBtn.onClick.AddListener(delegate {
+        ActionView.ActionCallBtn.onClick.AddListener(delegate
+        {
             OnCallBtnClick();
         });
-        ActionView.ActionAllinBtn.onClick.AddListener(delegate {
+        ActionView.ActionAllinBtn.onClick.AddListener(delegate
+        {
             OnAllinBtnClick();
         });
-        ActionView.ActionRaiseBtn.onClick.AddListener(delegate {
+        ActionView.ActionRaiseBtn.onClick.AddListener(delegate
+        {
             OnRaiseBtnClick();
         });
-        ActionView.ShowRaiseBtn.onClick.AddListener(delegate {
+        ActionView.ShowRaiseBtn.onClick.AddListener(delegate
+        {
             OnShowRaiseBtnClick();
         });
 
-        MenuBtn.onClick.AddListener(delegate () {
+        MenuBtn.onClick.AddListener(delegate ()
+        {
             OnMenuBtnClick();
         });
-        MenuPanel.MenuStandUpBtn.onClick.AddListener(delegate () {
+        MenuPanel.MenuStandUpBtn.onClick.AddListener(delegate ()
+        {
             OnMenuStandUpBtnClick();
         });
-        MenuPanel.MenuBuyChipBtn.onClick.AddListener(delegate () {
+        MenuPanel.MenuBuyChipBtn.onClick.AddListener(delegate ()
+        {
             OnMenuBuyChipBtnClick();
         });
-        MenuPanel.MenuHangOutBtn.onClick.AddListener(delegate () {
+        MenuPanel.MenuHangOutBtn.onClick.AddListener(delegate ()
+        {
             OnMenuHangOutBtnClick();
         });
-        MenuPanel.MenuExitRoomBtn.onClick.AddListener(delegate () {
+        MenuPanel.MenuExitRoomBtn.onClick.AddListener(delegate ()
+        {
             OnMenuExitRoomBtnClick();
         });
-        MenuPanel.MenuCloseRoomBtn.onClick.AddListener(delegate () {
+        MenuPanel.MenuCloseRoomBtn.onClick.AddListener(delegate ()
+        {
             OnMenuCloseRoomBtnClick();
         });
-        ShowPublicBtn.onClick.AddListener(delegate () {
+        ShowPublicBtn.onClick.AddListener(delegate ()
+        {
             OnShowPublicBtnClick();
         });
 
-        BuyChipView.BuyBtn.onClick.AddListener(delegate {
+        BuyChipView.BuyBtn.onClick.AddListener(delegate
+        {
             BuyChipView.gameObject.SetActive(false);
             PreAddBet(int.Parse(BuyChipView.BuyChipTxt.text));
         });
@@ -326,10 +366,11 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         {
             PlayerList = JsonConvert.DeserializeObject<Dictionary<int, TexasPlayer>>(players.ToString());
         }
-        else {
+        else
+        {
             PlayerList = new Dictionary<int, TexasPlayer>();
         }
-		if (lookers != null && !string.IsNullOrEmpty(lookers.ToString()))
+        if (lookers != null && !string.IsNullOrEmpty(lookers.ToString()))
         {
             UpPlayerList = JsonConvert.DeserializeObject<Dictionary<int, TexasPlayer>>(lookers.ToString());
         }
@@ -338,8 +379,9 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             UpPlayerList = new Dictionary<int, TexasPlayer>();
         }
         InitView();
-     }
-    void SetSeatViews() {
+    }
+    void SetSeatViews()
+    {
 
         if (SeatViews.Length > 0 && SeatViews.Length == 9)
         {
@@ -397,7 +439,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                 newPos.x = 0;
                 (SeatViews[0].gameObject.transform as RectTransform).anchoredPosition3D = newPos;
                 (SeatPositions[0].gameObject.transform as RectTransform).anchoredPosition3D = newPos;
-                
+
 
                 SeatViews[2].gameObject.SetActive(false);
                 SeatPositions[2].gameObject.SetActive(false);
@@ -426,11 +468,13 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                 s.SeatNo = i;
                 s.SeatPosIndex = i;
                 s.SitBtn.onClick.RemoveAllListeners();
-                s.SitBtn.onClick.AddListener(delegate () {
+                s.SitBtn.onClick.AddListener(delegate ()
+                {
                     SitDown(s.SeatNo);
                 });
                 s.AvatarBtn.onClick.RemoveAllListeners();
-                s.AvatarBtn.onClick.AddListener(delegate () {
+                s.AvatarBtn.onClick.AddListener(delegate ()
+                {
                     if (s.Player != null && s.isSit)
                     {
                         PlayerInfoView.Show(s.Player.UId, RoomInfo.ClubId, CurPlayerSeat == null || !CurPlayerSeat.isSit);
@@ -490,7 +534,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         {
             foreach (int k in UpPlayerList.Keys)
             {
-				TexasPlayer p = UpPlayerList[k];
+                TexasPlayer p = UpPlayerList[k];
                 if (p.UId == Game.Instance.CurPlayer.Uid)
                 {
                     me = p;
@@ -518,7 +562,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         {
             //MenuPanel.ShowCloseBtn();
         }
-        if (RoomInfo.IsPublic == 1) {
+        if (RoomInfo.IsPublic == 1)
+        {
             HistoryBtn.gameObject.SetActive(false);
         }
     }
@@ -598,7 +643,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             actionQueue.Enqueue(cmd.Data);
         }
 
-        if (actionQueue.Count > 0) {
+        if (actionQueue.Count > 0)
+        {
             JsonObject resp = actionQueue.Dequeue();
             int op = int.Parse(resp[action].ToString());
             Debug.Log("operation---" + op + "---data--->>" + resp.ToString());
@@ -676,10 +722,12 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     #region 自己的操作
 
     #region 重连操作
-    void ReConnect() {
+    void ReConnect()
+    {
         MaskView.gameObject.SetActive(true);
         JsonObject param = new JsonObject();
-        TexasApi.ReConnect(param, (result) => {
+        TexasApi.ReConnect(param, (result) =>
+        {
             result.Add(action, (int)TexasGameOp.Reconnect);
             actionQueue.Enqueue(result);
         });
@@ -708,11 +756,11 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             TexasReconnection recnt = JsonConvert.DeserializeObject<TexasReconnection>(result["gameProcess"].ToString());
             //重现当前牌局
             //1.初始化牌局信息
-            ReSetGambleInfo(recnt.SBlindSite, recnt.SBlindBet, recnt.BBlindSite, recnt.BBlindBet, recnt.BankerSite,recnt.SiteUids);
+            ReSetGambleInfo(recnt.SBlindSite, recnt.SBlindBet, recnt.BBlindSite, recnt.BBlindBet, recnt.BankerSite, recnt.SiteUids);
             //2.初始化公共牌和底池信息
-            ReSetPublicInfo(recnt.AllBet,recnt.UnderCardArr);
+            ReSetPublicInfo(recnt.AllBet, recnt.UnderCardArr);
             //3.初始化玩家信息
-            ReSetPlayersChip(recnt.CurBetList,recnt.AllBetList);
+            ReSetPlayersChip(recnt.CurBetList, recnt.AllBetList);
             ReSetPlayerStatus(recnt.Allin, recnt.OutPlayers, recnt.OpArrForRound);
             //4.初始化自身信息和当前操作者
             if (recnt.SelfCards != null && recnt.SelfCards.Length == 2 && CurPlayerSeat != null && CurPlayerSeat.isSit)
@@ -728,7 +776,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             PlayerTurnNotify(recnt.OverBetNum, recnt.MaxBetLimit, recnt.CurPlayerUID, recnt.Ts);
         }
     }
-    void ReSetGambleInfo(int sBlindSeat, int sBlind, int bBlindSeat, int bBlind, int banker,List<int> uids)
+    void ReSetGambleInfo(int sBlindSeat, int sBlind, int bBlindSeat, int bBlind, int banker, List<int> uids)
     {
         //关闭等待开始界面
         StartBtn.gameObject.SetActive(false);
@@ -760,7 +808,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         MaxBlind = bBlind;
 
     }
-    void ReSetPublicInfo(int allBet,int[] underCardArr) {
+    void ReSetPublicInfo(int allBet, int[] underCardArr)
+    {
         mainPoolBet = allBet;
         MainChipPoolTxt.text = allBet.ToString();
         DealCenterCards(underCardArr);
@@ -874,7 +923,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     {
         MaskView.gameObject.SetActive(true);
         JsonObject param = new JsonObject();
-        TexasApi.ExitRoom(param,(result)=> {
+        TexasApi.ExitRoom(param, (result) =>
+        {
             result.Add(action, (int)TexasGameOp.OutRoomOp);
             actionQueue.Enqueue(result);
         });
@@ -885,9 +935,10 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         if (int.Parse(result["code"].ToString()) != 200)
         {
             Debug.Log(result["code"].ToString());
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7012"));// "退出房间失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7012"));// "退出房间失败");
         }
-        else {
+        else
+        {
             MenuPanel.gameObject.SetActive(false);
         }
     }
@@ -904,7 +955,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                 actionQueue.Enqueue(result);
             });
         }
-        else {
+        else
+        {
             Game.Instance.ShowTips(LocalizationManager.Instance.GetText("7013"));// "至少两人才能开始");
         }
     }
@@ -913,7 +965,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         MaskView.gameObject.SetActive(false);
         if (int.Parse(result["code"].ToString()) != 200)
         {
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7014"));// "开始游戏失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7014"));// "开始游戏失败");
         }
     }
     void SitDown(int site)
@@ -940,14 +992,15 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         MaskView.gameObject.SetActive(false);
         if (int.Parse(result["code"].ToString()) != 200)
         {
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7015"));// "坐下失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7015"));// "坐下失败");
         }
     }
     void StandUp()
     {
         MaskView.gameObject.SetActive(true);
         JsonObject param = new JsonObject();
-        TexasApi.StandUp(param, (result) => {
+        TexasApi.StandUp(param, (result) =>
+        {
             result.Add(action, (int)TexasGameOp.StandUpOp);
             actionQueue.Enqueue(result);
         });
@@ -957,7 +1010,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         MaskView.gameObject.SetActive(false);
         if (int.Parse(result["code"].ToString()) != 200)
         {
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7016"));// "站起失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7016"));// "站起失败");
         }
     }
     #endregion
@@ -967,7 +1020,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         MaskView.gameObject.SetActive(true);
         JsonObject param = new JsonObject();
         param.Add("bet", bet);
-        TexasApi.PreAddBet(param, (result) => {
+        TexasApi.PreAddBet(param, (result) =>
+        {
             result.Add(action, (int)TexasGameOp.PreAddBetOp);
             actionQueue.Enqueue(result);
         });
@@ -982,7 +1036,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         else
         {
             BuyChipView.gameObject.SetActive(true);
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7017"));// "添加筹码失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7017"));// "添加筹码失败");
         }
     }
 
@@ -1020,7 +1074,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         else
         {
             ActionView.ActionPanel.gameObject.SetActive(true);
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7018")); // "下注失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7018")); // "下注失败");
         }
     }
     /// <summary>
@@ -1054,7 +1108,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         else
         {
             ActionView.ActionPanel.gameObject.SetActive(true);
-            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(),"7019"));// "跟注失败");
+            Game.Instance.ShowTips(LocalizationManager.Instance.GetText(result["code"].ToString(), "7019"));// "跟注失败");
         }
     }
     /// <summary>
@@ -1159,13 +1213,14 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     #endregion
 
     #region 发送自己的底牌
-    void SendMyCard(int card,int index)
+    void SendMyCard(int card, int index)
     {
         MaskView.gameObject.SetActive(true);
         JsonObject param = new JsonObject();
         param.Add("card", card);
         param.Add("cardIndex", index);
-        TexasApi.OpenHandCard(param, (result) => {
+        TexasApi.OpenHandCard(param, (result) =>
+        {
             result.Add(action, (int)TexasGameOp.OpenCard);
             result.Add("cardIndex", index);
             actionQueue.Enqueue(result);
@@ -1177,7 +1232,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         if (int.Parse(result["code"].ToString()) == 200)
         {
             int cardIndex = int.Parse(result["cardIndex"].ToString());
-            if (CurPlayerSeat != null) {
+            if (CurPlayerSeat != null)
+            {
                 PokerItem p = CurPlayerSeat.OwnPokerCards[cardIndex];
                 p.EyeBtn.onClick.RemoveAllListeners();
                 p.EyeImg.gameObject.SetActive(true);
@@ -1191,10 +1247,13 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
 
     #region 监听到的操作和系统事件
 
-    void OnTexasNotified(JsonObject data) {
-        if (data != null && data.ContainsKey("op")) {
+    void OnTexasNotified(JsonObject data)
+    {
+        if (data != null && data.ContainsKey("op"))
+        {
             string op = data["op"].ToString();
-            switch (op) {
+            switch (op)
+            {
                 case "inRoom":
                     //玩家进入通知
                     PlayerEnterNotify(data["player"] as JsonObject);
@@ -1298,7 +1357,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                         data = data["data"] as JsonObject;
                         int uid = int.Parse(data["uid"].ToString());
                         string audio = data["audio"].ToString();
-                        PlayerSound(uid,audio);
+                        PlayerSound(uid, audio);
                         break;
                     }
                 case "opError":
@@ -1319,12 +1378,14 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                     {
                         RoomClosedNotify();
                         break;
-                    };
+                    }
+                    ;
                 case "clubRoom_setRoomTime":
                     {
                         data = data["data"] as JsonObject;
                         int roomid = int.Parse(data["roomId"].ToString());
-                        if (roomid == RoomInfo.RoomId) {
+                        if (roomid == RoomInfo.RoomId)
+                        {
                             if (RoomInfo.Status == 0)
                             {
                                 string scene = PlayerPrefs.GetString("LastScene");
@@ -1368,24 +1429,27 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     void PlayerExitNotify(int uid)
     {
         Game.Instance.ShowTips(string.Format(LocalizationManager.Instance.GetText("7024"), uid));// ("玩家ID:" + uid + "退出房间");
-        if (PlayerList.ContainsKey(uid)) {
+        if (PlayerList.ContainsKey(uid))
+        {
             TexasPlayer p = PlayerList[uid];
             if (CurPlayerSeat != null && CurPlayerSeat.Player.UId == uid)
             {
                 string scene = PlayerPrefs.GetString("LastScene");
-                if(scene == "ClubScene")
+                if (scene == "ClubScene")
                 {
                     Transfer.Instance[TransferKey.RoomSwitch] = ClubRoomSwitch.Dz;
                 }
                 SceneManager.LoadScene(scene);
             }
-            else {
+            else
+            {
                 TexasSeatView s = SeatViews[p.Site];
                 if (CurPlayerSeat == null)
                 {
                     s.StandUp(0);
                 }
-                else {
+                else
+                {
                     s.StandUp(1);
                 }
                 if (ActionPlayerSeat != null && ActionPlayerSeat.Player.UId == uid)
@@ -1420,7 +1484,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// 玩家站起
     /// </summary>
     /// <param name="uid"></param>
-    void PlayerStandUpNotify(int uid,string type)
+    void PlayerStandUpNotify(int uid, string type)
     {
         if (PlayerList.ContainsKey(uid))
         {
@@ -1479,12 +1543,14 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// </summary>
     /// <param name="uid"></param>
     /// <param name="seat"></param>
-    void PlayerSitDownNotify(int uid, TexasPlayer player) {
+    void PlayerSitDownNotify(int uid, TexasPlayer player)
+    {
         if (!UpPlayerList.ContainsKey(uid))
         {
             UpPlayerList.Add(uid, player);
         }
-        else {
+        else
+        {
             UpPlayerList[uid] = player;
         }
         if (Game.Instance.CurPlayer.Uid == uid)
@@ -1530,7 +1596,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             RefreshSeatViews();
         }
     }
-    void AnimationBeforeSitdown(int site, Action callback = null) {
+    void AnimationBeforeSitdown(int site, Action callback = null)
+    {
 
         if (SeatViews.Length > 0)
         {
@@ -1541,7 +1608,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             int ptNum = Math.Abs(ctNum - targSeat.SeatPosIndex);
             if (targSeat.SeatPosIndex == ctNum)
             {
-                targSeat.SeatTurnAnim(null,0, callback);
+                targSeat.SeatTurnAnim(null, 0, callback);
 
                 for (int i = 0; i < SeatViews.Length; i++)
                 {
@@ -1656,9 +1723,11 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// </summary>
     /// <param name="uid"></param>
     /// <param name="bet"></param>
-    void PlayerAddChipNotify(int uid, int bet) {
+    void PlayerAddChipNotify(int uid, int bet)
+    {
         TexasPlayer p = null;
-        if (PlayerList.ContainsKey(uid)) {
+        if (PlayerList.ContainsKey(uid))
+        {
             p = PlayerList[uid];
             p.Bet += bet;
             TexasSeatView s = SeatViews[p.Site];
@@ -1669,13 +1738,15 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             p = UpPlayerList[uid];
             p.Bet += bet;
         }
-        if (me.UId == uid) {
+        if (me.UId == uid)
+        {
             ClubChips -= bet;
             if (RoomInfo.IsPublic == 1)
             {
                 Game.Instance.CurPlayer.Gold = ClubChips;
             }
-            if (wantSit >= 0) {
+            if (wantSit >= 0)
+            {
                 int seat = wantSit;
                 SitDown(seat);
                 wantSit = -1;
@@ -1726,7 +1797,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// <param name="bBlindUid"></param>
     /// <param name="bBlind"></param>
     /// <param name="banker"></param>
-    void GambleStartNotify(JsonObject data) {
+    void GambleStartNotify(JsonObject data)
+    {
         int sBlindSeat = int.Parse(data["sBlindSite"].ToString());
         int sBlind = int.Parse(data["sBlindBet"].ToString());
         int bBlindSeat = int.Parse(data["bBlindSite"].ToString());
@@ -1768,7 +1840,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         curBet = bBlind;
         MaxBlind = bBlind;
 
-        if (CurPlayerSeat == null || CurPlayerSeat.isSit == false) {
+        if (CurPlayerSeat == null || CurPlayerSeat.isSit == false)
+        {
             SendPlayerCards();
         }
     }
@@ -1780,7 +1853,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// <param name="maxBetLimit"></param>
     /// <param name="uid"></param>
     /// <param name="ts"></param>
-    void PlayerTurnNotify(int overBteNum,int maxBetLimit,int uid,int ts) {
+    void PlayerTurnNotify(int overBteNum, int maxBetLimit, int uid, int ts)
+    {
         //上玩家结束
         if (ActionPlayerSeat != null)
         {
@@ -1792,15 +1866,18 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             }
         }
 
-        if (OnSeatViews != null) {
+        if (OnSeatViews != null)
+        {
             int pot = curBet;
-            foreach(TexasSeatView item in OnSeatViews) {
+            foreach (TexasSeatView item in OnSeatViews)
+            {
                 pot += item.Player.DeskChip;
             }
             CurPotTxt.text = LocalizationManager.Instance.GetText("7032") + ":" + pot;
         }
 
-        if (!PlayerList.ContainsKey(uid)) {
+        if (!PlayerList.ContainsKey(uid))
+        {
             //不存在就不处理
             return;
         }
@@ -1903,7 +1980,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// 进入牌局下一圈叫牌
     /// </summary>
     /// <param name="round"></param>
-    void NextRoundNotify(string round) {
+    void NextRoundNotify(string round)
+    {
         //把玩家筹码加入底池
         Game.Instance.AudioMgr.PlayAudioEffect("allin");
         MainChipPanel.gameObject.SetActive(true);
@@ -1922,7 +2000,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
 
                 //修改玩家状态
                 //如果Allin、弃牌、等待状态就保持原有状态，其他恢复普通状态
-                if (s.Player.State == TexasPlayerState.Wait|| s.Player.State == TexasPlayerState.Allin|| s.Player.State == TexasPlayerState.Fold)
+                if (s.Player.State == TexasPlayerState.Wait || s.Player.State == TexasPlayerState.Allin || s.Player.State == TexasPlayerState.Fold)
                 {
 
                 }
@@ -1939,7 +2017,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// 发系统牌通知
     /// </summary>
     /// <param name="cards"></param>
-    void ShowCenterCardsNotify(int[] cards) {
+    void ShowCenterCardsNotify(int[] cards)
+    {
         Game.Instance.AudioMgr.PlayAudioEffect("fapai");
         if (publicPokers.Count == 0)
         {
@@ -1992,13 +2071,13 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// </summary>
     /// <param name="uid"></param>
     /// <param name="bet"></param>
-    void BetNotify(int uid,int bet)
+    void BetNotify(int uid, int bet)
     {
         TexasPlayer p = PlayerList[uid];
         TexasSeatView s = SeatViews[p.Site];
         s.PlayAudioEffect(Game.Instance.AudioMgr.GetSoundClip("bet"));
         s.DoBet(bet);
-        if (curBet>0)
+        if (curBet > 0)
         {
             s.ChangeState(TexasPlayerState.Raise);
         }
@@ -2018,7 +2097,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         TexasSeatView s = SeatViews[p.Site];
         s.PlayAudioEffect(Game.Instance.AudioMgr.GetSoundClip("bet"));
 
-        s.DoBet(curBet-s.Player.DeskChip);
+        s.DoBet(curBet - s.Player.DeskChip);
         s.ChangeState(TexasPlayerState.Call);
     }
     /// <summary>
@@ -2038,12 +2117,14 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// <param name="uid"></param>
     /// <param name="card"></param>
     /// <param name="cardIndex"></param>
-    void OpendHandCardNotify(int uid ,int card ,int cardIndex) {
-        if (PlayerList.ContainsKey(uid) && isPlaying) {
+    void OpendHandCardNotify(int uid, int card, int cardIndex)
+    {
+        if (PlayerList.ContainsKey(uid) && isPlaying)
+        {
             TexasPlayer p = PlayerList[uid];
             TexasSeatView s = SeatViews[p.Site];
 
-            if (s.OwnPokerCards.Count ==2)
+            if (s.OwnPokerCards.Count == 2)
             {
                 s.OwnPokerCards[cardIndex].RenderView(card.ToString());
                 s.ShowBottomCards(cardIndex);
@@ -2055,10 +2136,10 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     /// 牌局结束
     /// </summary>
     /// <param name="data"></param>
-    void GambleResultNotify(JsonObject data, int[] cards,int cardNum,int compNum)
+    void GambleResultNotify(JsonObject data, int[] cards, int cardNum, int compNum)
     {
         ActionView.CloseAutoNextPanel();
-        StartCoroutine(IEGambleResult(1.2f,data,cards,cardNum, compNum));
+        StartCoroutine(IEGambleResult(1.2f, data, cards, cardNum, compNum));
         StartCoroutine(DataClear(8.6f));
     }
     IEnumerator IEGambleResult(float time, JsonObject data, int[] cards, int cardNum, int compNum)
@@ -2090,7 +2171,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                 PokerItem p = CurPlayerSeat.OwnPokerCards[i];
                 int index = i;
                 p.EyeBtn.onClick.RemoveAllListeners();
-                p.EyeBtn.onClick.AddListener(delegate {
+                p.EyeBtn.onClick.AddListener(delegate
+                {
                     SendMyCard(int.Parse(p.Type), index);
                 });
             }
@@ -2137,13 +2219,15 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             if (CurPlayerSeat != null && CurPlayerSeat.Player.UId == s.Player.UId && balance > 0)
             {
                 s.PlayAudioEffect(Game.Instance.AudioMgr.GetSoundClip("incomePot"));
-                if (compNum > 1) {
+                if (compNum > 1)
+                {
                     s.CloseEyeBtns();
                 }
             }
         }
     }
-    void DataInit(List<int> uids) {
+    void DataInit(List<int> uids)
+    {
         MaskView.gameObject.SetActive(false);
         isPlaying = true;
         roundTxt = "";
@@ -2173,7 +2257,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
         }
         RecyclePokers();
     }
-    IEnumerator DataClear(float time) {
+    IEnumerator DataClear(float time)
+    {
         MainChipPanel.gameObject.SetActive(true);
         if (OnSeatViews != null)
         {
@@ -2188,7 +2273,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             }
         }
         MainChipPoolTxt.text = mainPoolBet.ToString();
-        
+
         yield return new WaitForSeconds(time);
         //关闭界面
         if (RoomInfo.Status == 1)
@@ -2279,7 +2364,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     #endregion
 
     #region UI操作
-    void RefreshSeatViews() {
+    void RefreshSeatViews()
+    {
         if (SeatViews != null)
         {
             for (int i = 0; i < SeatViews.Length; i++)
@@ -2301,17 +2387,21 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             RefreshNickColor();
         }
     }
-	public void OnStartBtnClick(){
-		StartGame ();
-	}
-    public void OnMenuBtnClick() {
+    public void OnStartBtnClick()
+    {
+        StartGame();
+    }
+    public void OnMenuBtnClick()
+    {
         MenuPanel.gameObject.SetActive(true);
     }
-    public void OnMenuStandUpBtnClick() {
-		if (CurPlayerSeat != null) {
-			StandUp();
-		}
-		MenuPanel.gameObject.SetActive(false);
+    public void OnMenuStandUpBtnClick()
+    {
+        if (CurPlayerSeat != null)
+        {
+            StandUp();
+        }
+        MenuPanel.gameObject.SetActive(false);
     }
     void BuyChip()
     {
@@ -2325,7 +2415,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
             BuyChipView.ChipSlider.value = RoomInfo.MinBet;
             BuyChipView.gameObject.SetActive(true);
         }
-        else {
+        else
+        {
             if (RoomInfo.IsPublic == 1)
             {
                 Game.Instance.ShowTips(LocalizationManager.Instance.GetText("7026"));// 公共房间直接提示不够钱"钱不够买入");
@@ -2358,7 +2449,7 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                 }
             }, false);
 
-            
+
         }
     }
     public void OnMenuBuyChipBtnClick()
@@ -2398,19 +2489,21 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     {
         Dictionary<string, string> param = new Dictionary<string, string>();
         param.Add("roomId", RoomInfo.RoomId.ToString());
-        TexasApi.GetGameRoomLiveData(param, RoomInfo.IsPublic == 1, (resp,error) =>
+        TexasApi.GetGameRoomLiveData(param, RoomInfo.IsPublic == 1, (resp, error) =>
         {
             if (error == null)
-            { 
+            {
                 LiveRecordPanel.gameObject.SetActive(true);
-                LiveRecordPanel.InitTexasView(resp,UpPlayerList);
+                LiveRecordPanel.InitTexasView(resp, UpPlayerList);
             }
-            else {
+            else
+            {
                 Game.Instance.ShowTips(error);
             }
         });
     }
-    public void OnHistoryBtnClick() {
+    public void OnHistoryBtnClick()
+    {
         HistoryPanel.roomId = RoomInfo.RoomId;
         HistoryPanel.Show();
     }
@@ -2429,8 +2522,9 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
 
     public void OnShopBtnClick() { }
 
-    public void ActiveActionPanel(int overBetNum,int maxBetLimit) {
-        ActionView.ActiveActionPanel(overBetNum, maxBetLimit, CurPlayerSeat.Player.DeskChip, CurPlayerSeat.Player.Bet, MaxBlind, curBet,mainPoolBet);
+    public void ActiveActionPanel(int overBetNum, int maxBetLimit)
+    {
+        ActionView.ActiveActionPanel(overBetNum, maxBetLimit, CurPlayerSeat.Player.DeskChip, CurPlayerSeat.Player.Bet, MaxBlind, curBet, mainPoolBet);
     }
     public void ActiveAutoNextPanel()
     {
@@ -2465,13 +2559,16 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     {
         AllinOption();
     }
-    public void OnFoldBtnClick() {
+    public void OnFoldBtnClick()
+    {
         FoldOption();
     }
-    public void OnCheckBtnClick() {
+    public void OnCheckBtnClick()
+    {
         CheckOption();
     }
-    public void OnCallBtnClick() {
+    public void OnCallBtnClick()
+    {
         CallBetOption();
     }
     #region 发牌动画
@@ -2512,7 +2609,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     }
     public IEnumerator ISendPlayerCards(int[] cards)
     {
-        for (int j = 0; j < 2; j++) {
+        for (int j = 0; j < 2; j++)
+        {
             for (int i = 0; i < OnSeatViews.Count; i++)
             {
                 var go = Instantiate(pokerTpl);
@@ -2520,14 +2618,15 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
                 go.transform.SetParent(PokerPoolPanel);
                 (go.transform as RectTransform).anchoredPosition3D = Vector3.zero;
                 (go.transform as RectTransform).localScale = new Vector3(0.3f, 0.3f, 1);
-                
+
                 TexasSeatView seat = OnSeatViews[i];
                 if (seat.Player != null && seat.Player.State == TexasPlayerState.Wait)
                 {
                     continue;
                 }
                 seat.Player.State = TexasPlayerState.Normal;
-                if (CurPlayerSeat != null && seat.Player.UId == CurPlayerSeat.Player.UId) {
+                if (CurPlayerSeat != null && seat.Player.UId == CurPlayerSeat.Player.UId)
+                {
                     p.RenderView(cards[j].ToString());
                 }
                 p.MyRotation.DealCard(j, seat.SmallArea);
@@ -2545,7 +2644,8 @@ public class TexasTableMgr : MonoBehaviour, IPointerClickHandler
     public void DealCenterCards(int[] cards)
     {
         string[] strs = new string[cards.Length];
-        for (int i = 0; i < cards.Length; i++) {
+        for (int i = 0; i < cards.Length; i++)
+        {
             strs[i] = cards[i].ToString();
         }
         StartCoroutine(DealCenterCards(strs));

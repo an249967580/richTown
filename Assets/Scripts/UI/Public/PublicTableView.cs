@@ -130,20 +130,36 @@ namespace RT
         private void OnDestroy()
         {
             NotificationCenter.Instance.RemoveNotifyListener(NotificationType.Currency, onCurrencyNotify);
+            NotificationCenter.Instance.RemoveNotifyListener(NotificationType.public_room_dissolve, onUpdatePublicRoom);
+            CancelInvoke(nameof(CheckPublicTableList)); // ✅ 退出时停止定时器
+        }
+
+        /// <summary>
+        /// 定时检测公共桌子列表
+        /// </summary>
+        private void CheckPublicTableList()
+        {
+            // 如果当前遮罩没打开，就可以刷新
+            // if (!maskView.gameObject.activeSelf)
+            // {
+            Debug.Log("[PublicTableView] Auto refresh public table list...");
+            findList(true);
+            // }
         }
 
         void onCurrencyNotify(NotifyMsg msg)
         {
-            if (Game.Instance.CurPlayer != null)
-            {
-                // DiamondTxt.text = Game.Instance.CurPlayer.Diamond.ToString();
-                tvCoins.text = Game.Instance.CurPlayer.Gold.ToString();
-            }
+            // if (Game.Instance.CurPlayer != null)
+            // {
+            //     // DiamondTxt.text = Game.Instance.CurPlayer.Diamond.ToString();
+            //     // tvCoins.text = Game.Instance.CurPlayer.Gold.ToString();
+            // }
+            GetPlayerInfo();
         }
 
         void onUpdatePublicRoom(NotifyMsg msg)
         {
-            findList(true);
+            findList(false);
         }
 
         private void Start()
@@ -152,6 +168,9 @@ namespace RT
             tableView.DataSource = this;
             tableView.RegisterPrefabForCellReuseIdentifier(itemPublicTablePrefab, "ItemPublicTableCRI");
             findList(true);
+
+            // ✅ 每隔30秒刷新一次列表
+            InvokeRepeating(nameof(CheckPublicTableList), 2f, 2f);
         }
 
         void findList(bool first)
@@ -352,7 +371,7 @@ namespace RT
                 Game.Instance.ShowTips(errorMsg);
                 if (code == 216) // 房间不存在或已过期，刷新列表
                 {
-                    findList(true);
+                    findList(false);
                 }
             }
         }

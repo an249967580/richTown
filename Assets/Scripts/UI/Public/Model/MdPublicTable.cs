@@ -11,7 +11,7 @@ namespace RT
 
         public void FindList(Action<HttpResult<List<ItemTableData>>> action)
         {
-            ClubApi.FindTables(clubId, game, action, true);
+            ClubApi.FindTables(clubId, game, action, false);
         }
 
 

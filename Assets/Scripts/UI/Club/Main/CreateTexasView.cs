@@ -37,8 +37,13 @@ namespace RT
             // tvTime.text = _md.TimeList[0].title;
             // tvFee.text = _md.FeeList[0].title;
             // _md.fee = _md.FeeList[0].num;
-            _md.thinkTime = 15;
+            // _md.thinkTime = 15;
+            // ✅ 新增：监听思考时间三个选项
+            tg15.onValueChanged.AddListener((isOn) => { if (isOn) _md.thinkTime = 15; });
+            tg20.onValueChanged.AddListener((isOn) => { if (isOn) _md.thinkTime = 20; });
+            tg30.onValueChanged.AddListener((isOn) => { if (isOn) _md.thinkTime = 30; });
 
+            _md.time = 10;
             sAntes.onValueChanged.AddListener(antesChange);
             sMinChips.onValueChanged.AddListener(minChipsChange);
             sMaxChips.onValueChanged.AddListener(maxChipsChange);
@@ -84,8 +89,8 @@ namespace RT
             {
                 _md.isBuyIn = isOn;
             });
-    
-             UIEventListener.Get(goPin).onClick = openPin;
+
+            UIEventListener.Get(goPin).onClick = openPin;
         }
 
         private void Start()
@@ -96,7 +101,12 @@ namespace RT
             sAntes.value = idxAntes;
             sMinChips.value = idxMinChips;
             sMaxChips.value = idxMaxChips;
+            tg15.isOn = true; // ✅ 默认选中15秒
             _md.thinkTime = 15;
+            // ✅ 新增：监听思考时间三个选项
+            tg15.onValueChanged.AddListener((isOn) => { if (isOn) _md.thinkTime = 15; });
+            tg20.onValueChanged.AddListener((isOn) => { if (isOn) _md.thinkTime = 20; });
+            tg30.onValueChanged.AddListener((isOn) => { if (isOn) _md.thinkTime = 30; });
             _md.antes = _md.BlindList[idxAntes];
             _md.minChips = _md.BlindList[idxAntes] * _md.RateList[idxMinChips];
             _md.maxChips = _md.BlindList[idxAntes] * _md.RateList[idxMaxChips];
@@ -104,7 +114,7 @@ namespace RT
             _md.isBuyIn = false;
             // _md.fee = _md.FeeList[0].num;
             // tvFee.text = _md.FeeList[0].title;
-            // _md.time = _md.TimeList[0].num;
+            _md.time = 10;
             // tvTime.text = _md.TimeList[0].title;
         }
 
@@ -118,7 +128,7 @@ namespace RT
             _md.roomName = ipRoom.text.Trim();
             if (_md.isPin)
             {
-                
+
             }
             else
             {
@@ -136,7 +146,7 @@ namespace RT
                 }
                 else
                 {
-                    if(result.data != null)
+                    if (result.data != null)
                     {
                         SureView vi = UIClubSpawn.Instance.CreateSureView();
                         vi.ShowTip(string.Format(result.errorMsg, result.data.num, result.data.limit));
@@ -145,7 +155,7 @@ namespace RT
                     {
                         Game.Instance.ShowTips(result.errorMsg);
                     }
-                    
+
                 }
             });
 
